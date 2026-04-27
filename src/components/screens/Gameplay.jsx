@@ -3,8 +3,8 @@ import FingerTrail from '../ui/FingerTrail'
 import './screens.css'
 
 // Screen 5 — Active Gameplay
-// Camera feed as full background (Phase 4).
-// Demon heads spawn and move. Finger trail follows hand position.
+// Camera feed fills the background (managed by MediaPipe Camera in ControllerPanel).
+// Demon heads and finger trail render as overlays.
 // All game logic lives in ControllerPanel — this screen only renders.
 
 function Gameplay({ gameState }) {
@@ -12,17 +12,19 @@ function Gameplay({ gameState }) {
 
   return (
     <div className="screen gameplay-screen">
-      {/* Camera feed fills this area in Phase 4 */}
-      <div className="camera-placeholder">
-        <p>[ Camera Feed — Phase 4 ]</p>
-      </div>
+      {/* Camera feed — stream attached by MediaPipe Camera in ControllerPanel */}
+      <video
+        id="gameplay-camera"
+        autoPlay
+        playsInline
+        muted
+        className="camera-feed"
+      />
 
-      {/* Demon heads rendered over camera feed */}
       {activeDemonHeads.map(demon => (
         <DemonHead key={demon.id} demon={demon} />
       ))}
 
-      {/* Finger trail rendered over everything */}
       <FingerTrail trail={fingerTrail} />
     </div>
   )
