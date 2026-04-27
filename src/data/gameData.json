@@ -3,7 +3,7 @@
     "easy": {
       "label": "Easy",
       "tagline": "Warm Up — Cut demons at your own pace",
-      "timeLimit": 60,
+      "timeLimit": 30,
       "spawnIntervalMs": 2000,
       "demonSpeed": 1,
       "penaltyOnMiss": false
@@ -11,7 +11,7 @@
     "medium": {
       "label": "Medium",
       "tagline": "Hunter Mode — The demons get faster",
-      "timeLimit": 45,
+      "timeLimit": 30,
       "spawnIntervalMs": 1200,
       "demonSpeed": 1.8,
       "penaltyOnMiss": false
