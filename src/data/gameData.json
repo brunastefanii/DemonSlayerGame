@@ -1,0 +1,33 @@
+{
+  "levels": {
+    "easy": {
+      "label": "Easy",
+      "tagline": "Warm Up — Cut demons at your own pace",
+      "timeLimit": 60,
+      "spawnIntervalMs": 2000,
+      "demonSpeed": 1,
+      "penaltyOnMiss": false
+    },
+    "medium": {
+      "label": "Medium",
+      "tagline": "Hunter Mode — The demons get faster",
+      "timeLimit": 45,
+      "spawnIntervalMs": 1200,
+      "demonSpeed": 1.8,
+      "penaltyOnMiss": false
+    },
+    "hard": {
+      "label": "Hard",
+      "tagline": "Demon Frenzy — Survive the onslaught",
+      "timeLimit": 30,
+      "spawnIntervalMs": 700,
+      "demonSpeed": 2.8,
+      "penaltyOnMiss": true
+    }
+  },
+  "gradeThresholds": {
+    "easy":   { "S": 20, "A": 15, "B": 10, "C": 5 },
+    "medium": { "S": 25, "A": 18, "B": 12, "C": 6 },
+    "hard":   { "S": 30, "A": 22, "B": 15, "C": 8 }
+  }
+}

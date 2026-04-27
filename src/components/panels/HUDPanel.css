@@ -1,0 +1,57 @@
+.hud-panel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  pointer-events: none;
+  z-index: 10;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.6), transparent);
+}
+
+.hud-score,
+.hud-timer,
+.hud-combo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.hud-label {
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  color: rgba(255, 255, 255, 0.6);
+  text-transform: uppercase;
+}
+
+.hud-value {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1;
+}
+
+.hud-timer--low .hud-value {
+  color: #ff6b6b;
+}
+
+.hud-timer--critical .hud-value {
+  color: #ff2222;
+  animation: pulse 0.5s ease-in-out infinite alternate;
+}
+
+.hud-combo-value {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #ffd700;
+  letter-spacing: 0.1em;
+}
+
+@keyframes pulse {
+  from { transform: scale(1); }
+  to   { transform: scale(1.2); }
+}
