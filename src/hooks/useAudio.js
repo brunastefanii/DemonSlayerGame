@@ -54,6 +54,23 @@ export function playMusic(screen) {
 
 // ─── SFX ──────────────────────────────────────────────────────────────────────
 
+// Level card hover — soft UI blip
+export function playHover() {
+  const ctx  = getCtx()
+  const osc  = ctx.createOscillator()
+  const gain = ctx.createGain()
+  osc.connect(gain)
+  gain.connect(ctx.destination)
+  osc.type = 'sine'
+  osc.frequency.setValueAtTime(520, ctx.currentTime)
+  osc.frequency.exponentialRampToValueAtTime(620, ctx.currentTime + 0.06)
+  gain.gain.setValueAtTime(0.0001, ctx.currentTime)
+  gain.gain.linearRampToValueAtTime(0.12, ctx.currentTime + 0.02)
+  gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.1)
+  osc.start(ctx.currentTime)
+  osc.stop(ctx.currentTime + 0.12)
+}
+
 // Countdown 3 / 2 / 1 — deep drum hit, pitch rises each count
 export function playCountdown(step) {
   const ctx  = getCtx()

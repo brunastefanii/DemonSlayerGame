@@ -1,4 +1,5 @@
 import gameData from '../../data/gameData.json'
+import { playHover } from '../../hooks/useAudio'
 import './screens.css'
 
 // Screen 2 — Level Select
@@ -19,6 +20,7 @@ function LevelSelect({ gameState, updateState }) {
           <button
             key={key}
             className={`level-card level-card--${key}`}
+            onMouseEnter={playHover}
             onClick={() => handleSelectLevel(key)}
           >
             <h3 className="level-card__name">{level.label}</h3>
