@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import gameData from '../../data/gameData.json'
+import { playCountdown, playGo } from '../../hooks/useAudio'
 import './screens.css'
 
 // Screen 4 — Countdown
@@ -9,6 +10,15 @@ const STEPS = [3, 2, 1, 'GO!']
 
 function Countdown({ gameState, updateState }) {
   const [step, setStep] = useState(0)
+
+  // Play sound on each step change
+  useEffect(() => {
+    if (step < STEPS.length - 1) {
+      playCountdown(step)
+    } else {
+      playGo()
+    }
+  }, [step])
 
   useEffect(() => {
     if (step < STEPS.length - 1) {

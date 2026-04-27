@@ -1,4 +1,6 @@
+import { useEffect } from 'react'
 import gameData from '../../data/gameData.json'
+import { stopMusic, playTimesUp } from '../../hooks/useAudio'
 import './screens.css'
 
 // Screen 6 — Time's Up
@@ -17,6 +19,11 @@ function getGrade(score, level) {
 function TimesUp({ gameState, updateState }) {
   const { score, demonsSlayed, selectedLevel } = gameState
   const grade = getGrade(score, selectedLevel)
+
+  useEffect(() => {
+    stopMusic()
+    playTimesUp()
+  }, [])
 
   const handlePlayAgain = () => {
     updateState({

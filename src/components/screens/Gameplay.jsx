@@ -1,5 +1,7 @@
+import { useEffect } from 'react'
 import DemonHead from '../ui/DemonHead'
 import FingerTrail from '../ui/FingerTrail'
+import { playMusic, stopMusic } from '../../hooks/useAudio'
 import './screens.css'
 
 // Screen 5 — Active Gameplay
@@ -10,9 +12,13 @@ import './screens.css'
 function Gameplay({ gameState }) {
   const { activeDemonHeads, fingerTrail } = gameState
 
+  useEffect(() => {
+    playMusic('gameplay')
+    return () => stopMusic()
+  }, [])
+
   return (
     <div className="screen gameplay-screen">
-      {/* Camera feed — stream attached by MediaPipe Camera in ControllerPanel */}
       <video
         id="gameplay-camera"
         autoPlay

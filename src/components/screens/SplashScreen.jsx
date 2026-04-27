@@ -1,9 +1,16 @@
+import { useEffect } from 'react'
+import { playMusic, stopMusic } from '../../hooks/useAudio'
 import './screens.css'
 
 // Screen 1 — Splash / Welcome
 // Entry point. Writes gameScreen → 'levelSelect' when PLAY is pressed.
 
 function SplashScreen({ updateState }) {
+  useEffect(() => {
+    playMusic('splash')
+    return () => stopMusic()
+  }, [])
+
   return (
     <div className="screen splash-screen">
       <div className="splash-logo">
