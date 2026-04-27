@@ -1,3 +1,4 @@
+/* --- Living demon --- */
 .demon-head {
   width: 80px;
   height: 80px;
@@ -7,6 +8,7 @@
   font-size: 3rem;
   user-select: none;
   pointer-events: none;
+  transform: translate(-50%, -50%);
   animation: demonPulse 0.8s ease-in-out infinite alternate;
   filter: drop-shadow(0 0 8px rgba(230, 57, 70, 0.7));
 }
@@ -14,4 +16,63 @@
 @keyframes demonPulse {
   from { transform: translate(-50%, -50%) scale(1); }
   to   { transform: translate(-50%, -50%) scale(1.12); }
+}
+
+/* --- Slay animation container --- */
+.demon-slay {
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* --- Split halves --- */
+.demon-half {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  font-size: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translate(-50%, -50%);
+  filter: drop-shadow(0 0 6px rgba(230, 57, 70, 0.9));
+}
+
+.demon-half--left {
+  clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100%);
+  animation: slayLeft 0.65s ease-out forwards;
+}
+
+.demon-half--right {
+  clip-path: polygon(50% 0, 100% 0, 100% 100%, 50% 100%);
+  animation: slayRight 0.65s ease-out forwards;
+}
+
+@keyframes slayLeft {
+  0%   { transform: translate(-50%, -50%) rotate(0deg);    opacity: 1; }
+  100% { transform: translate(-110%, 10%) rotate(-45deg);  opacity: 0; }
+}
+
+@keyframes slayRight {
+  0%   { transform: translate(-50%, -50%) rotate(0deg);   opacity: 1; }
+  100% { transform: translate(10%, 10%)  rotate(45deg);   opacity: 0; }
+}
+
+/* --- Splatter burst --- */
+.demon-splatter {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(230, 57, 70, 0.9) 0%, rgba(180, 20, 30, 0.5) 40%, transparent 70%);
+  animation: splatterBurst 0.45s ease-out forwards;
+  pointer-events: none;
+}
+
+@keyframes splatterBurst {
+  0%   { transform: translate(-50%, -50%) scale(0.3); opacity: 1; }
+  60%  { opacity: 0.8; }
+  100% { transform: translate(-50%, -50%) scale(2.2); opacity: 0; }
 }

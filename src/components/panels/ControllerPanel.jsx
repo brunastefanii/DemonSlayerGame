@@ -7,8 +7,9 @@ import { useHandTracking } from '../../hooks/useHandTracking'
 // The only component that writes to shared state during active gameplay.
 // Renders nothing — it is pure logic.
 
-const SLAY_RADIUS = 50   // px — distance from demon center that counts as a slay
-const TRAIL_LENGTH = 15  // max finger trail points kept in state
+const SLAY_RADIUS  = 50   // px — distance from demon center that counts as a slay
+const TRAIL_LENGTH = 15   // max finger trail points kept in state
+const SLAY_LINGER  = 650  // ms — how long a slayed demon stays for its animation
 
 function createDemon(speed) {
   const W = window.innerWidth
@@ -35,34 +36,40 @@ function createDemon(speed) {
     vx: (dx / dist) * s + (Math.random() - 0.5),
     vy: (dy / dist) * s + (Math.random() - 0.5),
     spawnTime: Date.now(),
+    slayed: false,
+    slayTime: null,
   }
 }
 
 function ControllerPanel({ gameState, updateState }) {
   const { gameActive, selectedLevel } = gameState
 
-  // Finger move handler — updates trail and detects slays
+  // Finger move handler — updates trail and detects slays.
+  // Slayed demons are marked slayed:true and frozen in place; the movement
+  // loop removes them after SLAY_LINGER ms so the animation can play out.
   const handleFingerMove = useCallback(({ x, y }) => {
     updateState(prev => {
       const trail = [...prev.fingerTrail, { x, y }].slice(-TRAIL_LENGTH)
 
-      const slayed = []
-      const remaining = []
-      prev.activeDemonHeads.forEach(demon => {
+      let slayCount = 0
+      const updated = prev.activeDemonHeads.map(demon => {
+        if (demon.slayed) return demon // already animating out
         const dx = x - demon.x
         const dy = y - demon.y
-        Math.sqrt(dx * dx + dy * dy) < SLAY_RADIUS
-          ? slayed.push(demon)
-          : remaining.push(demon)
+        if (Math.sqrt(dx * dx + dy * dy) < SLAY_RADIUS) {
+          slayCount++
+          return { ...demon, slayed: true, slayTime: Date.now() }
+        }
+        return demon
       })
 
-      if (slayed.length > 0) {
+      if (slayCount > 0) {
         return {
           fingerTrail: trail,
-          activeDemonHeads: remaining,
-          score: prev.score + slayed.length * 10,
-          demonsSlayed: prev.demonsSlayed + slayed.length,
-          currentCombo: prev.currentCombo + slayed.length,
+          activeDemonHeads: updated,
+          score: prev.score + slayCount * 10,
+          demonsSlayed: prev.demonsSlayed + slayCount,
+          currentCombo: prev.currentCombo + slayCount,
         }
       }
 
@@ -97,7 +104,8 @@ function ControllerPanel({ gameState, updateState }) {
     return () => clearInterval(spawnInterval)
   }, [gameActive, selectedLevel])
 
-  // Demon movement (~30fps)
+  // Demon movement (~30fps).
+  // Slayed demons are frozen (no position update) and removed after SLAY_LINGER ms.
   useEffect(() => {
     if (!gameActive) return
     const moveInterval = setInterval(() => {
@@ -106,13 +114,16 @@ function ControllerPanel({ gameState, updateState }) {
         const now = Date.now()
         const W = window.innerWidth
         const H = window.innerHeight
-        const moved = prev.activeDemonHeads
-          .map(d => ({ ...d, x: d.x + d.vx, y: d.y + d.vy }))
+
+        const next = prev.activeDemonHeads
+          .map(d => d.slayed ? d : { ...d, x: d.x + d.vx, y: d.y + d.vy })
           .filter(d => {
+            if (d.slayed) return now - d.slayTime < SLAY_LINGER
             if (now - d.spawnTime < 600) return true
             return d.x > -100 && d.x < W + 100 && d.y > -100 && d.y < H + 100
           })
-        return { activeDemonHeads: moved }
+
+        return { activeDemonHeads: next }
       })
     }, 33)
     return () => clearInterval(moveInterval)
