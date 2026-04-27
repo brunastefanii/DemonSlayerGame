@@ -1,0 +1,17 @@
+.demon-head {
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  user-select: none;
+  pointer-events: none;
+  animation: demonPulse 0.8s ease-in-out infinite alternate;
+  filter: drop-shadow(0 0 8px rgba(230, 57, 70, 0.7));
+}
+
+@keyframes demonPulse {
+  from { transform: translate(-50%, -50%) scale(1); }
+  to   { transform: translate(-50%, -50%) scale(1.12); }
+}
