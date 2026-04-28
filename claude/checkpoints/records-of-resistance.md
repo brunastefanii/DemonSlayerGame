@@ -60,4 +60,17 @@ The AI Direction Log is for conversation history only. Records of Resistance is 
 
 ---
 
+### RoR 4 — 2026-04-27 — Full Visual Redesign Rejected
+
+**What AI gave:**
+A 5-part visual redesign based on a Figma inspiration image: deep purple-black background, neon magenta finger trail with SVG glow, magenta accents replacing all red, a floating glass HUD panel with backdrop blur, and score popups (+10 GOOD / +10 PERFECT!) rising from slayed demon positions.
+
+**What I did instead:**
+Rejected all of it. Asked AI to save a checkpoint documenting what was tried, then revert all source files to Checkpoint 01 state.
+
+**Why:**
+Did not like any of the visual changes.
+
+---
+
 _[Add new records below as they occur throughout the project]_

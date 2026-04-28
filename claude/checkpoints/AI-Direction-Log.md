@@ -318,5 +318,6 @@ User requested checkpoint before implementing any visual changes.
 | Checkpoint | Date | Summary |
 |-----------|------|---------|
 | [checkpoint-01.md](checkpoint-01.md) | 2026-04-27 | Full build through Phase 5 (audio + slay animation), before visual redesign |
+| [checkpoint-02.md](checkpoint-02.md) | 2026-04-27 | Visual redesign attempt — all 5 changes rejected and reverted |
 
 _[Checkpoint docs live in `claude/checkpoints/`. Add a row here each time one is created.]_
