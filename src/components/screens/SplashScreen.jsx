@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { playMusic, stopMusic } from '../../hooks/useAudio'
+import bgImage from '../../assets/images/demon slay 1.png'
 import './screens.css'
 
 // Screen 1 — Splash / Welcome
@@ -13,19 +14,22 @@ function SplashScreen({ updateState }) {
 
   return (
     <div className="screen splash-screen">
-      <div className="splash-logo">
-        <h1>DEMON SLAYER</h1>
-        <h2>HUNTERS</h2>
+      <div className="splash-bg" style={{ backgroundImage: `url(${bgImage})` }} />
+
+      <div className="splash-content">
+        <div
+          className="play-btn-wrap"
+          onClick={() => updateState({ gameScreen: 'levelSelect' })}
+        >
+          <div className="play-btn-border">
+            <div className="play-btn-fill">PLAY</div>
+          </div>
+          <span className="play-pip play-pip--top">◆</span>
+          <span className="play-pip play-pip--bottom">◆</span>
+          <span className="play-pip play-pip--left">◆</span>
+          <span className="play-pip play-pip--right">◆</span>
+        </div>
       </div>
-
-      <div className="splash-silhouette" />
-
-      <button
-        className="btn btn--primary btn--large"
-        onClick={() => updateState({ gameScreen: 'levelSelect' })}
-      >
-        PLAY
-      </button>
     </div>
   )
 }

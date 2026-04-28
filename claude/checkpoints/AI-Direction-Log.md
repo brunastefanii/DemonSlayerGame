@@ -313,11 +313,37 @@ User requested checkpoint before implementing any visual changes.
 
 ---
 
+### Entry 13 — 2026-04-28 — Splash Screen Visual Implementation
+
+**What I asked AI to do:**
+Implement the splash screen using a custom background image (no button in the art) and recreate the PLAY button in CSS to match the design.
+
+**What AI produced:**
+- `SplashScreen.jsx` updated: imports background image, removes placeholder logo/silhouette, renders `.splash-bg` + CSS PLAY button
+- `index.html`: Google Fonts link for Oswald 700
+- `screens.css`: full splash section rewritten — contain background, CSS octagonal PLAY button with neon glow, diamond pips, hover/active states
+- Button anchored with `position: absolute; bottom: 12%` after repositioning fix
+
+**What I kept:**
+- Everything after the responsiveness fix
+
+**What I changed/rejected:**
+- Initial `background-size: cover` caused bottom of image to be cropped — changed to `contain`
+- Initial `padding-bottom: 10%` caused button to overlap SLAY text — changed to `position: absolute; bottom: 12%`
+
+**Why:**
+Image is 3:2; 16:9 desktop with cover crops the bottom. Button needed absolute anchoring to stay consistent across screen widths.
+
+**Checkpoint:** YES — checkpoint-03.md
+
+---
+
 ## Checkpoint Index
 
 | Checkpoint | Date | Summary |
 |-----------|------|---------|
 | [checkpoint-01.md](checkpoint-01.md) | 2026-04-27 | Full build through Phase 5 (audio + slay animation), before visual redesign |
 | [checkpoint-02.md](checkpoint-02.md) | 2026-04-27 | Visual redesign attempt — all 5 changes rejected and reverted |
+| [checkpoint-03.md](checkpoint-03.md) | 2026-04-28 | Splash screen background art + CSS PLAY button approved |
 
 _[Checkpoint docs live in `claude/checkpoints/`. Add a row here each time one is created.]_
