@@ -345,5 +345,6 @@ Image is 3:2; 16:9 desktop with cover crops the bottom. Button needed absolute a
 | [checkpoint-01.md](checkpoint-01.md) | 2026-04-27 | Full build through Phase 5 (audio + slay animation), before visual redesign |
 | [checkpoint-02.md](checkpoint-02.md) | 2026-04-27 | Visual redesign attempt — all 5 changes rejected and reverted |
 | [checkpoint-03.md](checkpoint-03.md) | 2026-04-28 | Splash screen background art + CSS PLAY button approved |
+| [checkpoint-04.md](checkpoint-04.md) | 2026-04-28 | Level select attempt failed; bad revert deleted work instead of iterating |
 
 _[Checkpoint docs live in `claude/checkpoints/`. Add a row here each time one is created.]_

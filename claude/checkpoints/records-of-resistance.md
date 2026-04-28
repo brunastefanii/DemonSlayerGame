@@ -73,4 +73,17 @@ Did not like any of the visual changes.
 
 ---
 
+### RoR 5 — 2026-04-28 — Wrong Revert: Deleted Work Instead of Iterating
+
+**What AI gave:**
+When user said "revert" after a failed level select implementation, AI used `git restore` on modified files AND `rm -rf` on new untracked files (LevelCard.jsx, LevelCard.css, cards/ asset folder), deleting all the work instead of keeping the implementation for iteration.
+
+**What I did instead:**
+Asked AI to do a checkpoint, document the error, and re-implement the level select screen from scratch correctly.
+
+**Why:**
+"Revert" meant go back to the last stable state and try again — not permanently delete new work. The correct approach would have been to keep the files and fix the specific issue (broken diamond image downloads), not delete everything.
+
+---
+
 _[Add new records below as they occur throughout the project]_
