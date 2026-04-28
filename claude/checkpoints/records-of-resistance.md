@@ -86,4 +86,17 @@ Asked AI to do a checkpoint, document the error, and re-implement the level sele
 
 ---
 
+### RoR 6 — 2026-04-28 — Level Select Card Implementation Rejected
+
+**What AI gave:**
+A full LevelCard component (`LevelCard.jsx`, `LevelCard.css`) built from Figma card designs (nodes 114:377, 114:379, 114:420) with: card background images, inline SVG diamond badges, inline SVG dividers, level name/subtitle/description text overlay, and spawn rate pips. Also updated `LevelSelect.jsx` to use the new component and background image, and rewrote the level-select section in `screens.css`.
+
+**What I did instead:**
+Rejected the implementation before it ran. Asked AI to revert the modified files (`LevelSelect.jsx`, `screens.css`) back to their prior state. New files (`LevelCard.jsx`, `LevelCard.css`) kept intact, not deleted.
+
+**Why:**
+Not stated — user interrupted before build.
+
+---
+
 _[Add new records below as they occur throughout the project]_

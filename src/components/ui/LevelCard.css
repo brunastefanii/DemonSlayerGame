@@ -1,0 +1,146 @@
+/* LevelCard — portrait card with hanging diamond badge
+   Figma original: 355 × 559px. Rendered at 195px wide (scale ≈ 0.549).
+*/
+
+.level-card {
+  position: relative;
+  width: 195px;
+  aspect-ratio: 355 / 559;
+  border-radius: 10px;
+  cursor: pointer;
+  overflow: visible;
+  user-select: none;
+  margin-top: 20px; /* room for diamond badge hanging 19px above card */
+  flex-shrink: 0;
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.level-card:hover  { transform: translateY(-6px) scale(1.04); filter: brightness(1.08); }
+.level-card:active { transform: translateY(-2px) scale(0.99); }
+
+/* Card background art */
+.lc-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+  display: block;
+  pointer-events: none;
+}
+
+/* ── Diamond badge ────────────────────────────────────────────────────────── */
+/* Figma: 103 × 117px container, centered, top: -35px
+   Scaled to 195px card: × 0.549 ≈ 57 × 64px, top: -19px              */
+
+.lc-badge {
+  position: absolute;
+  top: -19px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 57px;
+  height: 64px;
+  pointer-events: none;
+}
+
+/* Diamond SVG fills the badge container */
+.lc-badge-diamond {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Demon sprite crop window inside badge
+   Figma: 51 × 60px at left:28, top:29 → scaled: 28 × 33px at left:15, top:16 */
+.lc-badge-demon {
+  position: absolute;
+  left: 15px;
+  top: 16px;
+  width: 28px;
+  height: 33px;
+  overflow: hidden;
+}
+
+/* ── Text content overlay ─────────────────────────────────────────────────── */
+/* Figma text area starts at top:248px on 559px card = 44.4% from top */
+
+.lc-content {
+  position: absolute;
+  top: 52%;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+  padding: 2px 8px 10px;
+  text-align: center;
+}
+
+.lc-name {
+  font-family: 'Impact', 'Arial Narrow', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  text-shadow: 0 0 14px currentColor;
+}
+
+.lc-div1 {
+  width: 100%;
+  height: 9px;
+  flex-shrink: 0;
+  overflow: visible;
+}
+
+.lc-subtitle {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+}
+
+.lc-desc {
+  font-size: 0.62rem;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.35;
+  margin: 0;
+}
+
+.lc-div2 {
+  width: 100%;
+  height: 4px;
+  flex-shrink: 0;
+}
+
+/* ── Spawn rate section ───────────────────────────────────────────────────── */
+
+.lc-spawn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.lc-spawn-label {
+  font-size: 0.48rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+.lc-spawn-row {
+  display: flex;
+  gap: 4px;
+}
+
+/* Each spawn icon: 32 × 45px in Figma → 18 × 25px scaled */
+.lc-spawn-icon {
+  position: relative;
+  width: 18px;
+  height: 25px;
+  overflow: hidden;
+  transition: opacity 0.1s;
+}

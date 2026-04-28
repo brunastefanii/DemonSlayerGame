@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { playMusic, stopMusic } from '../../hooks/useAudio'
-import bgImage from '../../assets/images/demon slay 1.png'
+import bgImage from '../../assets/images/demon slayer 1.png'
 import './screens.css'
 
 // Screen 1 — Splash / Welcome

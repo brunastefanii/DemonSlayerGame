@@ -135,41 +135,131 @@
 .play-pip--right  { right: -9px;  top: 50%;  transform: translateY(-50%); }
 
 /* --- Level Select --- */
-.level-select-screen { gap: 2rem; }
-
-.level-cards {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-  justify-content: center;
+.level-select-screen {
+  position: relative;
+  padding: 0;
+  overflow: hidden;
+  background: #050008;
 }
 
-.level-card {
-  width: 180px;
-  padding: 1.5rem 1rem;
+.level-select-bg {
+  position: absolute;
+  inset: 0;
+  background-size: contain;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+/* BACK button — octagonal clip-path, purple border */
+.ls-back-wrap {
+  position: absolute;
+  top: 1.2rem;
+  left: 1.2rem;
+  z-index: 2;
+  cursor: pointer;
+  filter: drop-shadow(0 0 6px rgba(160, 80, 220, 0.5));
+  transition: filter 0.2s ease, transform 0.15s ease;
+}
+
+.ls-back-wrap:hover {
+  filter: drop-shadow(0 0 12px rgba(160, 80, 220, 0.85));
+  transform: scale(1.04);
+}
+
+.ls-back-wrap:active { transform: scale(0.97); }
+
+.ls-back-border {
+  clip-path: polygon(
+    10px 0%, calc(100% - 10px) 0%,
+    100% 10px, 100% calc(100% - 10px),
+    calc(100% - 10px) 100%, 10px 100%,
+    0% calc(100% - 10px), 0% 10px
+  );
+  background: #9944cc;
+  padding: 2px;
+}
+
+.ls-back-fill {
+  clip-path: polygon(
+    10px 0%, calc(100% - 10px) 0%,
+    100% 10px, 100% calc(100% - 10px),
+    calc(100% - 10px) 100%, 10px 100%,
+    0% calc(100% - 10px), 0% 10px
+  );
+  background: rgba(4, 0, 12, 0.92);
+  padding: 0.5rem 1.4rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: #ffffff;
+}
+
+/* Tip bar — octagonal border + dark fill */
+.ls-tip {
+  width: min(620px, 90%);
+  clip-path: polygon(
+    8px 0%, calc(100% - 8px) 0%,
+    100% 8px, 100% calc(100% - 8px),
+    calc(100% - 8px) 100%, 8px 100%,
+    0% calc(100% - 8px), 0% 8px
+  );
+  background: #9944cc;
+  padding: 2px;
+  filter: drop-shadow(0 0 8px rgba(153, 68, 204, 0.4));
+}
+
+.ls-tip-inner {
+  clip-path: polygon(
+    8px 0%, calc(100% - 8px) 0%,
+    100% 8px, 100% calc(100% - 8px),
+    calc(100% - 8px) 100%, 8px 100%,
+    0% calc(100% - 8px), 0% 8px
+  );
+  background: rgba(4, 0, 12, 0.9);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.65rem 1.2rem 0.65rem 0.8rem;
+}
+
+/* Diamond info icon — SVG */
+.ls-tip-icon {
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+}
+
+.ls-tip-text {
+  margin: 0;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.9);
+  letter-spacing: 0.03em;
+}
+
+.ls-tip-label {
+  color: #9944cc;
+  font-weight: 700;
+  margin-right: 0.3em;
+}
+
+.level-select-cards {
+  position: absolute;
+  top: 40%;
+  left: 0;
+  right: 0;
+  z-index: 1;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.15);
-  border-radius: 8px;
-  cursor: pointer;
-  color: #fff;
-  transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+  align-items: center;
+  gap: 1rem;
 }
 
-.level-card:hover {
-  transform: scale(1.05);
-  background: rgba(255,255,255,0.1);
-  border-color: rgba(255,255,255,0.4);
+.level-select-cards-row {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  align-items: flex-start;
 }
-
-.level-card--easy:hover   { border-color: #4caf50; }
-.level-card--medium:hover { border-color: #ff9800; }
-.level-card--hard:hover   { border-color: #e63946; }
-
-.level-card__name    { font-size: 1.1rem; font-weight: 700; letter-spacing: 0.1em; }
-.level-card__tagline { font-size: 0.8rem; color: rgba(255,255,255,0.6); line-height: 1.4; }
 
 /* --- Camera Permission --- */
 .camera-permission-screen { gap: 1.5rem; }

@@ -338,6 +338,64 @@ Image is 3:2; 16:9 desktop with cover crops the bottom. Button needed absolute a
 
 ---
 
+### Entry 15 — 2026-04-28 — Level Select Screen: Background + Cards Approved
+
+**What I asked AI to do:**
+1. Use a new background image (purple demon forest scene with "SELECT LEVEL / CHOOSE YOUR HUNT" baked in) for the level select screen.
+2. Move the BACK button to upper left corner.
+3. Implement the three Figma card designs (nodes 114:594 Easy, 114:618 Medium, 114:642 Hard).
+4. Adjust card vertical position to sit just below "CHOOSE YOUR HUNT" text.
+5. Adjust text content inside cards to sit lower, closer to the bottom border.
+
+**What AI produced:**
+- `demon slayer level select.png` saved to `src/assets/images/`
+- `LevelSelect.jsx` updated: background image + LevelCard component + BACK button top-left
+- `LevelCard.jsx` (new): portrait card with card BG image, diamond badge with sprite-cropped demon icon, inline SVG dividers, level name/subtitle/desc, spawn rate pips
+- `LevelCard.css` (new): 195px wide, 355/559 aspect ratio, diamond badge hanging 19px above, sprite crop windows, text overlay
+- `screens.css`: level-select section replaced; cards container positioned at `top: 42%`
+- Assets downloaded to `cards/`: new card backgrounds, `sprite-easy-medium.png`, `sprite-hard.png`, updated diamond SVGs
+- Card content position tuned to `top: 52%` inside card
+
+**What I kept:**
+- Everything — background, BACK button, all three cards, final position values
+
+**What I changed/rejected:**
+- Position iterated: `bottom: 4%` → `top: 52%` → `top: 46%` → `top: 42%` (card container)
+- Card content: `top: 44%` → `top: 52%` (text inside card)
+- RoR 6 (previous full implementation attempt) was rejected before this — this attempt was approved
+
+**Why:**
+Cards needed to align visually with the background art.
+
+**Checkpoint:** YES — checkpoint-05.md
+
+---
+
+### Entry 14 — 2026-04-28 — Level Select Card Implementation Rejected
+
+**What I asked AI to do:**
+Re-implement Level Select screen with background image, three Figma card designs, diamond badges, and BACK button in upper left corner.
+
+**What AI produced:**
+- `LevelCard.jsx` — new component with card BG images, inline SVG diamond badges and dividers, text overlay, spawn rate pips
+- `LevelCard.css` — portrait card layout with hanging diamond badge
+- Updated `LevelSelect.jsx` — background image + LevelCard components + repositioned BACK button
+- Updated `screens.css` — rewrote level-select section
+
+**What I kept:**
+- `LevelCard.jsx` and `LevelCard.css` (kept for reference, not connected)
+
+**What I changed/rejected:**
+- Rejected full implementation before it ran
+- Reverted `LevelSelect.jsx` and `screens.css` to prior state
+
+**Why:**
+Not stated — user interrupted before build.
+
+**Checkpoint:** NO
+
+---
+
 ## Checkpoint Index
 
 | Checkpoint | Date | Summary |
@@ -346,5 +404,6 @@ Image is 3:2; 16:9 desktop with cover crops the bottom. Button needed absolute a
 | [checkpoint-02.md](checkpoint-02.md) | 2026-04-27 | Visual redesign attempt — all 5 changes rejected and reverted |
 | [checkpoint-03.md](checkpoint-03.md) | 2026-04-28 | Splash screen background art + CSS PLAY button approved |
 | [checkpoint-04.md](checkpoint-04.md) | 2026-04-28 | Level select attempt failed; bad revert deleted work instead of iterating |
+| [checkpoint-05.md](checkpoint-05.md) | 2026-04-28 | Level select screen approved — background art, BACK button, three Figma cards |
 
 _[Checkpoint docs live in `claude/checkpoints/`. Add a row here each time one is created.]_
