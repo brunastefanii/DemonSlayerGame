@@ -64,7 +64,7 @@
 
 .splash-content {
   position: absolute;
-  bottom: 12%;
+  bottom: 5%;
   left: 0;
   right: 0;
   z-index: 1;
@@ -76,12 +76,17 @@
 .play-btn-wrap {
   position: relative;
   cursor: pointer;
+  outline: none;
+  border: none;
+  background: transparent;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  will-change: filter;
   filter:
     drop-shadow(0 0 14px #ff1070)
     drop-shadow(0 0 40px rgba(255, 16, 112, 0.65))
     drop-shadow(0 18px 30px rgba(255, 16, 112, 0.35));
   transition: filter 0.2s ease, transform 0.15s ease;
-  user-select: none;
 }
 
 .play-btn-wrap:hover {
@@ -92,22 +97,30 @@
   transform: scale(1.04);
 }
 
-.play-btn-wrap:active {
-  transform: scale(0.97);
-}
+.play-btn-wrap:active { transform: scale(0.97); }
 
 .play-btn-border {
   clip-path: polygon(
-    18px 0%, calc(100% - 18px) 0%,
-    100% 18px, 100% calc(100% - 18px),
-    calc(100% - 18px) 100%, 18px 100%,
-    0% calc(100% - 18px), 0% 18px
+    38px 0%,
+    calc(100% - 38px) 0%,
+    100% 50%,
+    calc(100% - 38px) 100%,
+    38px 100%,
+    0% 50%
   );
   background: #ff1070;
   padding: 2px;
 }
 
 .play-btn-fill {
+  clip-path: polygon(
+    38px 0%,
+    calc(100% - 38px) 0%,
+    100% 50%,
+    calc(100% - 38px) 100%,
+    38px 100%,
+    0% 50%
+  );
   background: rgba(4, 0, 10, 0.94);
   padding: 1.1rem 5.5rem;
   font-family: 'Oswald', sans-serif;
