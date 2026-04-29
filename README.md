@@ -142,17 +142,20 @@ First version of `useBodySegmentation` ran a full rAF loop at 60fps. The finger 
 
 ## Five Questions Reflection
 
-<!-- BRUNA — paste your five answers here before submitting -->
-
 **1. Can I defend this?**
+I can defend my project and explain my decisions, especially the state architecture. I used one shared state where the Controller updates things like score, time, and game screen, and the other parts react to those changes, which keeps the system clear and consistent.
 
 **2. Is this mine?**
+The idea and visual direction are mine, including using the camera as the main interaction and the K-pop demon hunter theme inspiration, while AI was only used to help generate visuals that I later refined.
 
 **3. Did I verify?**
+I verified that the three panels actually share state, so when something changes it updates across the whole system instead of being faked.
 
 **4. Would I teach this?**
+I could teach this approach to a classmate, including how one part sends updates and the others receive and display them.
 
 **5. Is my documentation honest?**
+My documentation is honest and clearly explains what I asked AI to do and what I changed, so the final result reflects my own design decisions.
 
 ---
 
