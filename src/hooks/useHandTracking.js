@@ -4,7 +4,6 @@ import { Camera } from '@mediapipe/camera_utils'
 
 // Initializes MediaPipe Hands and Camera when gameActive is true.
 // Calls onFingerMove({ x, y }) on every frame a fingertip is detected.
-// x is mirrored to match the selfie (scaleX(-1)) video display.
 
 export function useHandTracking({ gameActive, onFingerMove }) {
   const handsRef = useRef(null)
@@ -39,8 +38,7 @@ export function useHandTracking({ gameActive, onFingerMove }) {
 
       const tip = results.multiHandLandmarks[0][8] // INDEX_FINGER_TIP
 
-      // Mirror x to match the scaleX(-1) selfie video
-      const x = (1 - tip.x) * window.innerWidth
+      const x = tip.x * window.innerWidth
       const y = tip.y * window.innerHeight
 
       callbackRef.current({ x, y })

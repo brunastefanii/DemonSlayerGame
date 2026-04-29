@@ -321,6 +321,15 @@
   position: relative;
   overflow: hidden;
   padding: 0;
+  background: #030010;
+}
+
+.gameplay-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  z-index: 0;
 }
 
 .camera-feed {
@@ -329,7 +338,19 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transform: scaleX(-1); /* mirror for selfie view */
+}
+
+.camera-feed--hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.segmentation-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 /* --- Time's Up --- */

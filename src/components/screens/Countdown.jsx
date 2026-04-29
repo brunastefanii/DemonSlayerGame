@@ -2,6 +2,9 @@ import { useState, useEffect } from 'react'
 import gameData from '../../data/gameData.json'
 import { playCountdown, playGo } from '../../hooks/useAudio'
 import bgImage from '../../assets/images/demon slayer 3 background.png'
+// Side-effect import: triggers the segmentation model singleton to start
+// downloading its wasm files during countdown, so it's ready for gameplay.
+import '../../hooks/useBodySegmentation'
 import img3 from '../../assets/images/demon slayer countdown transparent 3.png'
 import img2 from '../../assets/images/demon slayer countdown transparent 2.png'
 import img1 from '../../assets/images/demon slayer countdown transparent 1.png'
