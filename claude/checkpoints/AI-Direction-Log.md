@@ -405,5 +405,91 @@ Not stated — user interrupted before build.
 | [checkpoint-03.md](checkpoint-03.md) | 2026-04-28 | Splash screen background art + CSS PLAY button approved |
 | [checkpoint-04.md](checkpoint-04.md) | 2026-04-28 | Level select attempt failed; bad revert deleted work instead of iterating |
 | [checkpoint-05.md](checkpoint-05.md) | 2026-04-28 | Level select screen approved — background art, BACK button, three Figma cards |
+| [checkpoint-06.md](checkpoint-06.md) | 2026-04-28 | Camera Permission screen — floating layout over background art, ALLOW CAMERA button |
+| [checkpoint-07.md](checkpoint-07.md) | 2026-04-29 | Countdown screen + CSS HUD panel with purple neon glow |
+| [checkpoint-08.md](checkpoint-08.md) | 2026-04-29 | Gameplay screen — virtual background segmentation (MediaPipe SelfieSegmentation) |
 
 _[Checkpoint docs live in `claude/checkpoints/`. Add a row here each time one is created.]_
+
+---
+
+### Entry 16 — 2026-04-28 — Camera Permission Screen
+
+**What I asked AI to do:**
+Build the Camera Permission screen with a new background image (`demon slayer 3 background 1.png`), floating content (no panel), ALLOW CAMERA button matching the PLAY button style, bullet points explaining why the camera is needed, a privacy bar at the bottom, and a caption over the image area.
+
+**What AI produced:**
+- `CameraPermission.jsx` — full rewrite: no panel, floating `.cp-content` over background, BACK button reusing level select styles, ALLOW CAMERA button with hexagonal clip-path + `#ff1070` pink glow on wrapper, 3 bullets with icons, privacy note, bottom octagonal bar
+- `screens.css` — all `.cp-*` classes added
+- Third bullet line-break fixed with `display: flex; flexDirection: column` span
+
+**What I kept:**
+- Everything after position tuning
+
+**What I changed/rejected:**
+- Panel approach rejected immediately — wanted floating text like level select
+- Figma export attempted and abandoned mid-way ("we are not designing in figma we are doing the project")
+- ALLOW CAMERA button glow clipped by clip-path — fixed with wrapper div pattern (same as PLAY button)
+- Multiple position iterations for `.cp-content`, `.cp-bar`, `.cp-image-caption`
+- "WHY DO WE NEED IT?" alignment — needed `text-align: left` override
+- Third bullet line alignment — `<br />` caused indent; fixed with flex column span
+
+**Why:**
+Floating layout matches level select design language. Panel felt too heavy for this screen.
+
+**Checkpoint:** YES — checkpoint-06.md
+
+---
+
+### Entry 17 — 2026-04-29 — Countdown Screen + CSS HUD Panel
+
+**What I asked AI to do:**
+1. Build Countdown screen with transparent PNG countdown assets (3/2/1/GO) over background art — no camera feed.
+2. Replace the `demon slayer 4 score combo time 1.png` HUD asset with a CSS-built bar matching the reference design.
+
+**What AI produced:**
+- `Countdown.jsx` — 4 transparent PNG assets swapped per step index, `demon slayer 3 background.png` as background, `countIn` scale-in animation
+- `HUDPanel.jsx` — pure CSS bar: SCORE left / ✦ pip / COMBO center / ✦ pip / TIME right
+- `HUDPanel.css` — three-layer purple `drop-shadow` on wrapper, angled clip-path on bar, timer low/critical states
+
+**What I kept:**
+- Everything after alignment and glow tuning
+
+**What I changed/rejected:**
+- Camera feed for countdown rejected — user didn't want camera as background
+- HUD asset image rejected — too large; CSS version requested instead
+- Crescent SVG ornament removed on request
+- Combo `—` dash changed to `0`
+- HUD purple glow intensity tuned to match PLAY button
+
+**Why:**
+User preferred clean background art over camera feed for countdown. CSS HUD gives more control over size and glow than a PNG asset.
+
+**Checkpoint:** YES — checkpoint-07.md
+
+---
+
+### Entry 18 — 2026-04-29 — Gameplay Screen: Virtual Background Segmentation
+
+**What I asked AI to do:**
+Add a virtual background effect to the gameplay screen — player visible from camera, but their background replaced with the game background art (like Zoom virtual backgrounds).
+
+**What AI produced:**
+- `useBodySegmentation.js` — new hook using `@mediapipe/selfie_segmentation`, module-level singleton for early loading, throttled to ~15fps (every 4th frame), 640×360 canvas
+- `Gameplay.jsx` — canvas added, hidden video feeds both MediaPipe models
+- Side-effect import in `Countdown.jsx` to trigger model download during countdown
+- Normal (non-mirrored) orientation on user request; hand tracking x un-mirrored to match
+
+**What I kept:**
+- Everything after performance tuning
+
+**What I changed/rejected:**
+- First version: rAF loop competed with Hands model → finger trail stopped working → fixed with throttling
+- First version: model loaded at game start → slow/missing → fixed with singleton + countdown preload
+- Mirrored orientation rejected — user wanted normal (non-selfie) view
+- Canvas resolution reduced from 1280×720 to 640×360 for performance
+
+**Why:**
+Running both Hands and SelfieSegmentation at 60fps at full resolution was too heavy. Singleton preload hides CDN download behind countdown timer.
+
+**Checkpoint:** YES — checkpoint-08.md

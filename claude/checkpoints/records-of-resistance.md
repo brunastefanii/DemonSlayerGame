@@ -99,4 +99,82 @@ Not stated — user interrupted before build.
 
 ---
 
+### RoR 7 — 2026-04-28 — Camera Permission Panel Rejected
+
+**What AI gave:**
+A full bordered panel floating over the background with "CAMERA ACCESS" title, bullet points, and ALLOW CAMERA button inside a styled panel container.
+
+**What I did instead:**
+Rejected the panel. Asked for floating text directly over the background art, no panel — same approach as level select.
+
+**Why:**
+The panel felt too heavy and inconsistent with the rest of the design language. The background image has enough visual weight on its own.
+
+---
+
+### RoR 8 — 2026-04-28 — Figma Export Abandoned Mid-Way
+
+**What AI gave:**
+Started building the Camera Permission screen in Figma using the `use_figma` Plugin API. Failed on a node ID reference error.
+
+**What I did instead:**
+Interrupted and redirected: "we are not designing in figma we are doing the project."
+
+**Why:**
+The priority is building the game, not designing in Figma. The Figma work was a detour.
+
+---
+
+### RoR 9 — 2026-04-29 — Camera Feed for Countdown Rejected
+
+**What AI gave:**
+Countdown screen with the live camera feed as background + a dark overlay on top, then transparent PNG countdown assets over it.
+
+**What I did instead:**
+Asked to remove the camera feed entirely and replace with the static `demon slayer 3 background.png` background art.
+
+**Why:**
+Didn't like the look of the camera as countdown background. Clean background art looked better.
+
+---
+
+### RoR 10 — 2026-04-29 — HUD Asset Image Rejected
+
+**What AI gave:**
+A HUD bar using `demon slayer 4 score combo time 1.png` as a frame image, with score/combo/time values overlaid on top.
+
+**What I did instead:**
+Asked to build a CSS version of the HUD instead of using the asset.
+
+**Why:**
+The asset rendered too large and was hard to control. A CSS version gives full control over sizing, glow intensity, and responsive scaling.
+
+---
+
+### RoR 11 — 2026-04-29 — Mirrored Camera Orientation Rejected
+
+**What AI gave:**
+Virtual background canvas showing the player mirrored (selfie style) over the game background.
+
+**What I did instead:**
+Asked for normal (non-mirrored) orientation.
+
+**Why:**
+Normal orientation feels more natural for a game where you're acting as a character in the world, not looking at yourself in a mirror.
+
+---
+
+### RoR 12 — 2026-04-29 — Segmentation Performance Broke Finger Trail
+
+**What AI gave:**
+First version of `useBodySegmentation` running a full rAF loop at 60fps alongside the MediaPipe Hands model. The finger trail stopped working and the segmentation sometimes didn't show up.
+
+**What I did instead:**
+Asked to fix it. AI throttled segmentation to every 4th frame (~15fps) and added a module singleton to preload the model during countdown.
+
+**Why:**
+Running both MediaPipe models at full framerate saturated the CPU, starving the hand tracking. Throttling freed enough cycles for the finger trail to work again.
+
+---
+
 _[Add new records below as they occur throughout the project]_
