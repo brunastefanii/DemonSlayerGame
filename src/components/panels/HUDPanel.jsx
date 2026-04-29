@@ -5,11 +5,26 @@ import './HUDPanel.css'
 // Purple neon glow matching the reference design.
 
 function HUDPanel({ score, timeRemaining, currentCombo, demonsSlayed, lives, gameActive, gameScreen }) {
-  const showHUD = gameActive || gameScreen === 'countdown'
+  const showHUD = gameActive || gameScreen === 'countdown' || gameScreen === 'gameOver' || gameScreen === 'timesUp'
   if (!showHUD) return null
 
   const isLow = timeRemaining <= 10
   const isCritical = timeRemaining <= 5
+
+  if (gameScreen === 'gameOver' || gameScreen === 'timesUp') {
+    return (
+      <div className="hud-panel">
+        <div className="hud-bar hud-bar--score-only">
+          <span className="hud-pip">✦</span>
+          <div className="hud-section hud-section--center">
+            <span className="hud-label">SCORE</span>
+            <span className="hud-value">{score}</span>
+          </div>
+          <span className="hud-pip">✦</span>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="hud-panel">

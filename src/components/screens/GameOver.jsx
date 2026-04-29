@@ -1,13 +1,13 @@
 import { useEffect } from 'react'
 import { stopMusic, playTimesUp } from '../../hooks/useAudio'
-import bgImage from '../../assets/images/demon slayer times up background.png'
+import bgImage from '../../assets/images/demon slayer game over background.png'
 import './screens.css'
 
-// Screen 6 — Time's Up
+// Screen 7 — Game Over
+// Shown when the player loses all 3 lives.
 // Background art + PLAY AGAIN and BACK TO MENU buttons.
-// Score shown in HUD (score-only mode).
 
-function TimesUp({ gameState, updateState }) {
+function GameOver({ gameState, updateState }) {
   useEffect(() => {
     stopMusic()
     playTimesUp()
@@ -38,8 +38,8 @@ function TimesUp({ gameState, updateState }) {
   })
 
   return (
-    <div className="screen timesup-screen">
-      <div className="timesup-bg" style={{ backgroundImage: `url(${bgImage})` }} />
+    <div className="screen go-screen">
+      <div className="go-bg" style={{ backgroundImage: `url(${bgImage})` }} />
 
       <div className="go-actions">
         {/* PLAY AGAIN */}
@@ -60,4 +60,4 @@ function TimesUp({ gameState, updateState }) {
   )
 }
 
-export default TimesUp
+export default GameOver

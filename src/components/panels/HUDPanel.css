@@ -30,6 +30,12 @@
   );
 }
 
+/* Score-only mode (Game Over screen) */
+.hud-bar--score-only {
+  justify-content: center;
+  gap: 1.2rem;
+}
+
 /* Sections */
 .hud-section {
   display: flex;

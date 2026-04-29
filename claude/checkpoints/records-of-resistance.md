@@ -177,4 +177,30 @@ Running both MediaPipe models at full framerate saturated the CPU, starving the 
 
 ---
 
+### RoR 13 — 2026-04-29 — Game Over Buttons Too High
+
+**What AI gave:**
+Game Over screen with PLAY AGAIN and BACK TO MENU buttons positioned at `bottom: 12%`.
+
+**What I did instead:**
+Asked to move them lower. Changed to `bottom: 6%`.
+
+**Why:**
+At 12%, the buttons sat too high on the background art and didn't feel anchored to the bottom of the screen.
+
+---
+
+### RoR 14 — 2026-04-29 — Play Again Routed to Countdown
+
+**What AI gave:**
+PLAY AGAIN button on both Game Over and Times Up screens routing to `gameScreen: 'countdown'`.
+
+**What I did instead:**
+Changed to `gameScreen: 'levelSelect'`.
+
+**Why:**
+Player should go back to level selection when replaying — they may want to choose a different difficulty. Skipping straight to countdown assumes the same level, which is not the intended flow.
+
+---
+
 _[Add new records below as they occur throughout the project]_

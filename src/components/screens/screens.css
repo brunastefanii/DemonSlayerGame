@@ -426,6 +426,31 @@
 }
 
 /* --- Time's Up --- */
+.timesup-screen {
+  position: relative;
+  padding: 0;
+  overflow: hidden;
+  background: #050008;
+}
+
+.timesup-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 0;
+}
+
+.timesup-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
 .timesup-title {
   font-size: clamp(2rem, 7vw, 4rem);
   font-weight: 900;
@@ -708,4 +733,106 @@
   align-items: center;
   gap: 1rem;
   padding: 0.65rem 1.2rem 0.65rem 0.8rem;
+}
+
+/* --- Game Over --- */
+.go-screen {
+  position: relative;
+  padding: 0;
+  overflow: hidden;
+  background: #050008;
+}
+
+.go-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 0;
+}
+
+.go-actions {
+  position: absolute;
+  bottom: 6%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* PLAY AGAIN button — red/pink */
+.go-btn-wrap {
+  cursor: pointer;
+  will-change: filter;
+  transition: filter 0.2s ease, transform 0.15s ease;
+}
+
+.go-btn-wrap--play {
+  filter:
+    drop-shadow(0 0 10px #e63946)
+    drop-shadow(0 0 28px rgba(230, 57, 70, 0.6));
+}
+
+.go-btn-wrap--play:hover {
+  filter:
+    drop-shadow(0 0 16px #e63946)
+    drop-shadow(0 0 50px rgba(230, 57, 70, 0.85));
+  transform: scale(1.04);
+}
+
+.go-btn-wrap--play:active { transform: scale(0.97); }
+
+/* BACK TO MENU button — purple */
+.go-btn-wrap--menu {
+  filter:
+    drop-shadow(0 0 10px #9944cc)
+    drop-shadow(0 0 28px rgba(153, 68, 204, 0.6));
+}
+
+.go-btn-wrap--menu:hover {
+  filter:
+    drop-shadow(0 0 16px #9944cc)
+    drop-shadow(0 0 50px rgba(153, 68, 204, 0.85));
+  transform: scale(1.04);
+}
+
+.go-btn-wrap--menu:active { transform: scale(0.97); }
+
+/* Hexagonal border layer */
+.go-btn-border {
+  clip-path: polygon(
+    28px 0%, calc(100% - 28px) 0%,
+    100% 50%,
+    calc(100% - 28px) 100%, 28px 100%,
+    0% 50%
+  );
+  padding: 2px;
+}
+
+.go-btn-border--play { background: #e63946; }
+.go-btn-border--menu { background: #9944cc; }
+
+/* Inner fill */
+.go-btn-fill {
+  clip-path: polygon(
+    28px 0%, calc(100% - 28px) 0%,
+    100% 50%,
+    calc(100% - 28px) 100%, 28px 100%,
+    0% 50%
+  );
+  background: rgba(4, 0, 10, 0.92);
+  padding: 0.75rem 3rem;
+  font-family: 'Oswald', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
 }

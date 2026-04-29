@@ -4,6 +4,7 @@ import CameraPermission from '../screens/CameraPermission'
 import Countdown from '../screens/Countdown'
 import Gameplay from '../screens/Gameplay'
 import TimesUp from '../screens/TimesUp'
+import GameOver from '../screens/GameOver'
 import './BrowserPanel.css'
 
 // Panel A — The Browser (Game View Layer)
@@ -17,6 +18,7 @@ const screenMap = {
   countdown: Countdown,
   gameplay: Gameplay,
   timesUp: TimesUp,
+  gameOver: GameOver,
 }
 
 function BrowserPanel({ gameState, updateState }) {

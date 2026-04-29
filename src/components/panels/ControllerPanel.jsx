@@ -8,10 +8,22 @@ import { playSlay, playCombo, playHeartbeat, playTick } from '../../hooks/useAud
 // The only component that writes to shared state during active gameplay.
 // Renders nothing — it is pure logic.
 
-const SLAY_RADIUS  = 50   // px — distance from demon center that counts as a slay
-const MISS_RADIUS  = 100  // px from screen center — demon reaching this = 1 life lost
-const TRAIL_LENGTH = 15   // max finger trail points kept in state
-const SLAY_LINGER  = 650  // ms — how long a slayed demon stays for its split animation
+const SLAY_RADIUS      = 75   // px — matches demon visual radius (150px / 2)
+const MISS_RADIUS      = 100  // px from screen center — demon reaching this = 1 life lost
+const TRAIL_LENGTH     = 15   // max finger trail points kept in state
+const SLAY_LINGER      = 650  // ms — how long a slayed demon stays for its split animation
+const COMBO_THRESHOLD  = 3    // minimum kills in a burst to trigger combo
+const BURST_WINDOW_MS  = 800  // ms of inactivity that ends a kill burst
+
+// Returns the minimum distance from point (px,py) to segment (ax,ay)→(bx,by)
+function distToSegment(px, py, ax, ay, bx, by) {
+  const dx = bx - ax
+  const dy = by - ay
+  const lenSq = dx * dx + dy * dy
+  if (lenSq === 0) return Math.sqrt((px - ax) ** 2 + (py - ay) ** 2)
+  const t = Math.max(0, Math.min(1, ((px - ax) * dx + (py - ay) * dy) / lenSq))
+  return Math.sqrt((px - (ax + t * dx)) ** 2 + (py - (ay + t * dy)) ** 2)
+}
 
 function createDemon(speed) {
   const W = window.innerWidth
@@ -37,6 +49,7 @@ function createDemon(speed) {
     y,
     vx: (dx / dist) * s + (Math.random() - 0.5),
     vy: (dy / dist) * s + (Math.random() - 0.5),
+    imageIndex: Math.floor(Math.random() * 6),
     spawnTime: Date.now(),
     slayed: false,
     slayTime: null,
@@ -45,25 +58,25 @@ function createDemon(speed) {
 
 function ControllerPanel({ gameState, updateState }) {
   const { gameActive, selectedLevel } = gameState
-  const prevSlayedRef = useRef(0)
-  const prevComboRef  = useRef(0)
-  const prevTimeRef   = useRef(null)
+  const prevSlayedRef  = useRef(0)
+  const prevComboRef   = useRef(0)
+  const prevTimeRef    = useRef(null)
+  const burstRef       = useRef({ kills: 0, bonusApplied: false })
+  const burstTimerRef  = useRef(null)
 
   // ── Audio reactions (watch state, fire sounds) ──────────────────────────────
 
-  // Slay & combo sounds — fire when demonsSlayed increments
+  // Slay & combo sounds — fire when demonsSlayed or currentCombo increments
   useEffect(() => {
     if (!gameActive) return
     if (gameState.demonsSlayed > prevSlayedRef.current) {
       playSlay()
-      // Combo sound every 3 consecutive slays
-      if (gameState.currentCombo > 0 && gameState.currentCombo % 3 === 0) {
-        playCombo()
-      }
       prevSlayedRef.current = gameState.demonsSlayed
     }
-    // Reset combo ref when combo resets
-    if (gameState.currentCombo === 0) prevComboRef.current = 0
+    if (gameState.currentCombo > prevComboRef.current) {
+      playCombo()
+      prevComboRef.current = gameState.currentCombo
+    }
   }, [gameState.demonsSlayed, gameState.currentCombo, gameActive])
 
   // Timer urgency sounds — heartbeat ≤10s, tick ≤5s
@@ -80,37 +93,79 @@ function ControllerPanel({ gameState, updateState }) {
   // ── Finger tracking & slash detection ───────────────────────────────────────
 
   const handleFingerMove = useCallback(({ x, y }) => {
+    // Manage burst window outside updateState to keep the update pure
+    if (burstTimerRef.current) clearTimeout(burstTimerRef.current)
+    burstTimerRef.current = setTimeout(() => {
+      burstRef.current = { kills: 0, bonusApplied: false }
+    }, BURST_WINDOW_MS)
+
     updateState(prev => {
       if (prev.gamePaused) return {}
       const trail = [...prev.fingerTrail, { x, y }].slice(-TRAIL_LENGTH)
 
+      // Check each segment of the trail so fast sweeps don't skip over demons
+      const trailPoints = [...prev.fingerTrail, { x, y }]
+
       let slayCount = 0
       const updated = prev.activeDemonHeads.map(demon => {
         if (demon.slayed) return demon
-        const dx = x - demon.x
-        const dy = y - demon.y
-        if (Math.sqrt(dx * dx + dy * dy) < SLAY_RADIUS) {
+        const hit = trailPoints.some((pt, i) => {
+          if (i === 0) {
+            // First point — check as a single point
+            return Math.sqrt((pt.x - demon.x) ** 2 + (pt.y - demon.y) ** 2) < SLAY_RADIUS
+          }
+          // Check segment from previous point to current point
+          const prev = trailPoints[i - 1]
+          return distToSegment(demon.x, demon.y, prev.x, prev.y, pt.x, pt.y) < SLAY_RADIUS
+        })
+        if (hit) {
           slayCount++
           return { ...demon, slayed: true, slayTime: Date.now() }
         }
         return demon
       })
 
-      if (slayCount > 0) {
-        return {
-          fingerTrail: trail,
-          activeDemonHeads: updated,
-          score: prev.score + slayCount * 10,
-          demonsSlayed: prev.demonsSlayed + slayCount,
-          currentCombo: prev.currentCombo + slayCount,
-        }
+      if (slayCount === 0) return { fingerTrail: trail }
+
+      const prevBurstKills = burstRef.current.kills
+      burstRef.current.kills += slayCount
+
+      let pointsEarned
+      let comboIncrement = 0
+
+      if (burstRef.current.kills >= COMBO_THRESHOLD && !burstRef.current.bonusApplied) {
+        // Combo just activated — double all kills in this burst
+        burstRef.current.bonusApplied = true
+        comboIncrement = 1
+        // Retroactive bonus for kills before this batch (already scored at 1x, add 1x more)
+        const retroBonus = prevBurstKills * 10
+        // Current batch gets 2x
+        pointsEarned = slayCount * 20 + retroBonus
+      } else if (burstRef.current.bonusApplied) {
+        // Already in a combo burst — 2x for all kills
+        pointsEarned = slayCount * 20
+      } else {
+        // Normal kill, no combo yet
+        pointsEarned = slayCount * 10
       }
 
-      return { fingerTrail: trail }
+      return {
+        fingerTrail: trail,
+        activeDemonHeads: updated,
+        score: prev.score + pointsEarned,
+        demonsSlayed: prev.demonsSlayed + slayCount,
+        currentCombo: prev.currentCombo + comboIncrement,
+      }
     })
   }, [updateState])
 
   useHandTracking({ gameActive, onFingerMove: handleFingerMove })
+
+  // Reset burst state when game starts or ends
+  useEffect(() => {
+    burstRef.current = { kills: 0, bonusApplied: false }
+    if (burstTimerRef.current) clearTimeout(burstTimerRef.current)
+  }, [gameActive])
 
   // ── Pause (spacebar) ─────────────────────────────────────────────────────────
 
@@ -199,7 +254,7 @@ function ControllerPanel({ gameState, updateState }) {
               activeDemonHeads: surviving,
               lives: 0,
               gameActive: false,
-              gameScreen: 'timesUp',
+              gameScreen: 'gameOver',
             }
           }
           return { activeDemonHeads: surviving, lives: newLives }

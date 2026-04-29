@@ -408,6 +408,8 @@ Not stated — user interrupted before build.
 | [checkpoint-06.md](checkpoint-06.md) | 2026-04-28 | Camera Permission screen — floating layout over background art, ALLOW CAMERA button |
 | [checkpoint-07.md](checkpoint-07.md) | 2026-04-29 | Countdown screen + CSS HUD panel with purple neon glow |
 | [checkpoint-08.md](checkpoint-08.md) | 2026-04-29 | Gameplay screen — virtual background segmentation (MediaPipe SelfieSegmentation) |
+| [checkpoint-09.md](checkpoint-09.md) | 2026-04-29 | Gameplay features — lives, sword trail glow, pause system, combo scoring, demon images |
+| [checkpoint-10.md](checkpoint-10.md) | 2026-04-29 | Game Over + Times Up screens — background art, score-only HUD, hexagonal buttons |
 
 _[Checkpoint docs live in `claude/checkpoints/`. Add a row here each time one is created.]_
 
@@ -466,6 +468,56 @@ Floating layout matches level select design language. Panel felt too heavy for t
 User preferred clean background art over camera feed for countdown. CSS HUD gives more control over size and glow than a PNG asset.
 
 **Checkpoint:** YES — checkpoint-07.md
+
+---
+
+### Entry 19 — 2026-04-29 — Game Over Screen
+
+**What I asked AI to do:**
+Build the Game Over screen triggered when lives reach 0: use `demon slayer game over background.png`, show score in the HUD (score only, centered with diamond pips), add PLAY AGAIN and BACK TO MENU hexagonal buttons.
+
+**What AI produced:**
+- `GameOver.jsx` — background image, `.go-actions` with two hexagonal buttons, plays `playTimesUp` sound
+- `BrowserPanel.jsx` — `gameOver: GameOver` added to screenMap
+- `ControllerPanel.jsx` — fixed routing bug: `gameScreen: 'gameOver'` on lives = 0 (was `'timesUp'`)
+- `HUDPanel.jsx` — score-only layout for `gameScreen === 'gameOver'`; `showHUD` updated
+- `HUDPanel.css` — `.hud-bar--score-only` modifier: centered, gap between pip and score
+- `screens.css` — all `.go-*` classes: background, actions wrapper, hexagonal button border/fill, red + purple glows
+
+**What I kept:**
+- Everything after button position adjustment
+
+**What I changed/rejected:**
+- Buttons initially at `bottom: 12%` — moved to `bottom: 6%` (too high on screen)
+
+**Why:**
+Buttons were too far from the bottom of the background art.
+
+**Checkpoint:** YES — checkpoint-10.md
+
+---
+
+### Entry 20 — 2026-04-29 — Times Up Screen: Background + Matching Layout
+
+**What I asked AI to do:**
+Apply the same treatment to Times Up: use `demon slayer times up background.png`, score-only HUD at top, PLAY AGAIN and BACK TO MENU hexagonal buttons.
+
+**What AI produced:**
+- `TimesUp.jsx` — rebuilt to match Game Over: background image + `.go-actions` buttons, removed grade badge / final score text / old buttons
+- `HUDPanel.jsx` — score-only mode extended to `gameScreen === 'timesUp'`
+- `screens.css` — `.timesup-screen`, `.timesup-bg`, `.timesup-content` added
+- PLAY AGAIN on both screens routes to `levelSelect` (user corrected from `countdown`)
+
+**What I kept:**
+- Everything
+
+**What I changed/rejected:**
+- PLAY AGAIN initially routed to `countdown` — corrected to `levelSelect`
+
+**Why:**
+Player should re-pick their level when playing again, not skip straight into countdown with the same level.
+
+**Checkpoint:** YES — checkpoint-10.md
 
 ---
 
