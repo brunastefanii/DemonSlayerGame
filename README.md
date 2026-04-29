@@ -72,11 +72,77 @@ flowchart TD
 
 ## Design Intent
 
-Full PRD written before AI engagement: [`claude/docs/PRD_DemonSlayer.md`](claude/docs/PRD_DemonSlayer.md)
+> Written before AI engagement — this is the spec against which all AI output was evaluated.
 
-**Domain:** Gesture-based arcade game — hand tracking as the controller.
+### 1. Game Overview
 
-**Data model (state shape):**
+**Concept:** Demon Slayer Hunters is a browser-based, camera-powered arcade game fusing the kinetic energy of K-pop Demon Hunters aesthetics with the fast-paced slashing mechanics of Fruit Ninja. Players use their real hand — tracked through the device camera — to slice incoming demon heads in half before time runs out.
+
+**Design Pillars:**
+- **Physicality First** — the player's actual body IS the controller. Every interaction is gesture-driven.
+- **Instant Gratification** — from screen-on to gameplay in under 15 seconds. Zero friction.
+
+**Target Audience:**
+- Primary: Casual mobile/web gamers
+- Secondary: Students and players who enjoy gesture-based or camera games
+- Platform context: Desktop web browser with webcam access
+
+---
+
+### 2. Screen Map
+
+| Screen | Entry Trigger | Key Elements | Exit Trigger |
+|--------|--------------|--------------|--------------|
+| 1. Splash / Welcome | App load | Game logo, animated demon silhouette, PLAY button, ambient music | User taps PLAY |
+| 2. Level Select | PLAY pressed | 3 level cards (Easy / Medium / Hard), back button | User selects a level |
+| 3. Camera Permission | Level selected (first time) | Permission prompt, allow / deny, fallback message | Permission granted or denied |
+| 4. Countdown | Camera active | 3 → 2 → 1 → GO! animated overlay, demon silhouettes in background | GO! animation completes |
+| 5. Gameplay | Countdown ends | Live camera, demon heads, finger trail, score, timer, combo | Timer reaches 0:00 |
+| 6. Time's Up | Timer hits 0 | 'TIME'S UP!' title, score reveal, grade badge, play again + menu | User taps Play Again or Menu |
+
+**Screen-by-Screen Specifications:**
+
+**Screen 1 — Splash / Welcome**
+Full-screen dark atmospheric background. Animated demon silhouette rising from bottom. PLAY button: large, chunky, high contrast. Ambient audio loops on load. State written on PLAY: `gameScreen → 'levelSelect'`
+
+**Screen 2 — Level Select**
+Three large cards horizontally: Easy / Medium / Hard. Each card shows level name, descriptor text, and spawn rate indicator. Cards have hover state with color shift and scale. Back button returns to splash. State written: `selectedLevel → 'easy' | 'medium' | 'hard'`
+
+**Screen 3 — Camera Permission**
+Shown only if `cameraAllowed === null`. Friendly overlay explaining why camera is needed. ALLOW button triggers browser permission prompt. Denied fallback: *'Camera access is required to play. Please allow camera and refresh.'* State written: `cameraAllowed → true | false`
+
+**Screen 4 — Countdown**
+Background art with transparent 3 → 2 → 1 → GO! PNG assets. Each number scales up and fades with a drum sound cue. GO! triggers: `gameActive → true`, `timeRemaining → difficulty time limit`
+
+**Screen 5 — Active Gameplay**
+Camera feed as full background (player sees themselves with virtual background). Demon heads spawn from random edges and move toward center. Finger trail: glowing sword path follows fingertip in real time. Slay detection via trail intersection. On slay: demon splits in two halves with splatter animation. Top HUD bar: score · combo · timer · lives. Timer urgency: color shifts red at 10s, pulses at 5s.
+
+**Screen 6 — Time's Up**
+Background art. Score shown in HUD (score-only mode). PLAY AGAIN routes to Level Select. MAIN MENU routes to Splash.
+
+---
+
+### 3. The Three Panels
+
+**Panel A — The Browser (Game View Layer)**
+Renders the active game screen based on `gameScreen` state. Reads from shared state, never writes directly.
+- Reads: `gameScreen`, `selectedLevel`, `gameActive`, `activeDemonHeads`, `fingerTrail`
+- Writes: nothing
+
+**Panel B — The Detail View (HUD / Feedback Layer)**
+Displays real-time in-game data: score, timer, combo indicator, lives. Reacts instantly to state changes.
+- Reads: `score`, `timeRemaining`, `currentCombo`, `demonsSlayed`, `lives`, `gameScreen`
+- Writes: nothing — reactive only
+
+**Panel C — The Controller (Input & Game Logic Layer)**
+Manages camera gesture capture, finger tracking, demon hit detection, and timer. The only component that writes to shared state during active gameplay.
+- Reads: `gameActive`, `selectedLevel`, `gamePaused`, `activeDemonHeads`
+- Writes: `score`, `demonsSlayed`, `currentCombo`, `timeRemaining`, `lives`, `activeDemonHeads`, `fingerTrail`, `gameScreen`
+
+---
+
+### 4. Data Model
+
 ```json
 {
   "gameScreen": "splash",
@@ -94,9 +160,27 @@ Full PRD written before AI engagement: [`claude/docs/PRD_DemonSlayer.md`](claude
 }
 ```
 
-**Visual mood:** Dark K-pop idol aesthetic — deep purple-black backgrounds, neon red/purple accents, hexagonal UI geometry, Oswald typography, drop-shadow glow on all interactive elements.
+---
 
-**State flow:** User actions in BrowserPanel screens (PLAY, level select, camera allow) write `gameScreen` and `selectedLevel` up to `App.jsx`. ControllerPanel writes all gameplay values (score, lives, timer) in real time. HUDPanel and BrowserPanel both react immediately to those changes.
+### 5. Audio Design
+
+| Trigger | SFX |
+|---------|-----|
+| Countdown 3 / 2 / 1 | Deep drum hit, pitch rises each count |
+| GO! | Energetic synth burst |
+| Demon slay | Sharp slash + wet splatter impact |
+| Combo achieved | Ascending chime / synth stab |
+| Timer at 10s | Heartbeat-like pulse |
+| Timer at 5s | Rapid ticking |
+| Time's Up | Large bell ring / gong |
+
+---
+
+### 6. Visual Design
+
+**Style:** Dark K-pop idol aesthetic — deep purple-black backgrounds, neon red/purple accents, hexagonal UI geometry, Oswald typography, drop-shadow glow on all interactive elements.
+
+**Demons:** Stylized villain archetypes — dark idol energy, dramatic hair silhouettes, sharp makeup aesthetics, neon accents on dark backgrounds.
 
 ---
 
