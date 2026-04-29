@@ -38,7 +38,8 @@ export function useHandTracking({ gameActive, onFingerMove }) {
 
       const tip = results.multiHandLandmarks[0][8] // INDEX_FINGER_TIP
 
-      const x = tip.x * window.innerWidth
+      // Mirror x to match the scaleX(-1) canvas display
+      const x = (1 - tip.x) * window.innerWidth
       const y = tip.y * window.innerHeight
 
       callbackRef.current({ x, y })

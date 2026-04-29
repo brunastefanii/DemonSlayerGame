@@ -316,6 +316,77 @@
   to   { transform: translate(-50%, -50%) scale(1);   opacity: 1; }
 }
 
+/* --- Gameplay pause overlay --- */
+.gameplay-pause {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 20;
+}
+
+.gameplay-pause-word {
+  margin-top: 0.6rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.gameplay-pause-icon {
+  width: 80px;
+  height: 80px;
+  opacity: 0.9;
+  filter:
+    drop-shadow(0 0 12px rgba(153, 68, 204, 0.9))
+    drop-shadow(0 0 30px rgba(153, 68, 204, 0.5));
+}
+
+.gameplay-pause-actions {
+  position: absolute;
+  bottom: 8%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 1.5rem;
+}
+
+.pause-btn {
+  width: 60px;
+  height: 60px;
+  cursor: pointer;
+  padding: 12px;
+  background: rgba(4, 0, 12, 0.82);
+  border: 1px solid #9944cc;
+  box-shadow: inset 0 0 16px rgba(153, 68, 204, 0.08);
+  clip-path: polygon(
+    0% 0%, 100% 0%,
+    100% 70%, calc(100% - 10px) 100%,
+    10px 100%, 0% 70%
+  );
+  opacity: 0.85;
+  will-change: filter;
+  filter:
+    drop-shadow(0 0 12px rgba(153, 68, 204, 0.9))
+    drop-shadow(0 0 30px rgba(153, 68, 204, 0.5));
+  transition: opacity 0.15s, filter 0.15s;
+}
+
+.pause-btn svg {
+  width: 100%;
+  height: 100%;
+}
+
+.pause-btn:hover {
+  opacity: 1;
+  filter:
+    drop-shadow(0 0 16px rgba(153, 68, 204, 1))
+    drop-shadow(0 0 40px rgba(153, 68, 204, 0.7));
+}
+
 /* --- Gameplay --- */
 .gameplay-screen {
   position: relative;
@@ -351,6 +422,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transform: scaleX(-1);
 }
 
 /* --- Time's Up --- */

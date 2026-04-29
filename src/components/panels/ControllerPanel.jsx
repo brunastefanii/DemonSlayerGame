@@ -9,6 +9,7 @@ import { playSlay, playCombo, playHeartbeat, playTick } from '../../hooks/useAud
 // Renders nothing — it is pure logic.
 
 const SLAY_RADIUS  = 50   // px — distance from demon center that counts as a slay
+const MISS_RADIUS  = 100  // px from screen center — demon reaching this = 1 life lost
 const TRAIL_LENGTH = 15   // max finger trail points kept in state
 const SLAY_LINGER  = 650  // ms — how long a slayed demon stays for its split animation
 
@@ -80,6 +81,7 @@ function ControllerPanel({ gameState, updateState }) {
 
   const handleFingerMove = useCallback(({ x, y }) => {
     updateState(prev => {
+      if (prev.gamePaused) return {}
       const trail = [...prev.fingerTrail, { x, y }].slice(-TRAIL_LENGTH)
 
       let slayCount = 0
@@ -110,12 +112,27 @@ function ControllerPanel({ gameState, updateState }) {
 
   useHandTracking({ gameActive, onFingerMove: handleFingerMove })
 
+  // ── Pause (spacebar) ─────────────────────────────────────────────────────────
+
+  useEffect(() => {
+    if (!gameActive) return
+    const handleKeyDown = (e) => {
+      if (e.code === 'Space') {
+        e.preventDefault()
+        updateState(prev => ({ gamePaused: !prev.gamePaused }))
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [gameActive, updateState])
+
   // ── Game timer ───────────────────────────────────────────────────────────────
 
   useEffect(() => {
     if (!gameActive) return
     const interval = setInterval(() => {
       updateState(prev => {
+        if (prev.gamePaused) return {}
         if (prev.timeRemaining <= 1) {
           return { timeRemaining: 0, gameActive: false, gameScreen: 'timesUp' }
         }
@@ -131,8 +148,13 @@ function ControllerPanel({ gameState, updateState }) {
     if (!gameActive || !selectedLevel) return
     const level = gameData.levels[selectedLevel]
     const spawnInterval = setInterval(() => {
-      const demon = createDemon(level.demonSpeed)
-      updateState(prev => ({ activeDemonHeads: [...prev.activeDemonHeads, demon] }))
+      updateState(prev => {
+        if (prev.gamePaused) return {}
+        // Stop spawning in the last 2 seconds so the screen clears before time's up
+        if (prev.timeRemaining <= 2) return {}
+        const demon = createDemon(level.demonSpeed)
+        return { activeDemonHeads: [...prev.activeDemonHeads, demon] }
+      })
     }, level.spawnIntervalMs)
     return () => clearInterval(spawnInterval)
   }, [gameActive, selectedLevel])
@@ -143,20 +165,47 @@ function ControllerPanel({ gameState, updateState }) {
     if (!gameActive) return
     const moveInterval = setInterval(() => {
       updateState(prev => {
+        if (prev.gamePaused) return {}
         if (prev.activeDemonHeads.length === 0) return {}
         const now = Date.now()
         const W = window.innerWidth
         const H = window.innerHeight
+        const cx = W / 2
+        const cy = H / 2
 
-        const next = prev.activeDemonHeads
-          .map(d => d.slayed ? d : { ...d, x: d.x + d.vx, y: d.y + d.vy })
-          .filter(d => {
-            if (d.slayed) return now - d.slayTime < SLAY_LINGER
-            if (now - d.spawnTime < 600) return true
-            return d.x > -100 && d.x < W + 100 && d.y > -100 && d.y < H + 100
-          })
+        const moved = prev.activeDemonHeads.map(d =>
+          d.slayed ? d : { ...d, x: d.x + d.vx, y: d.y + d.vy }
+        )
 
-        return { activeDemonHeads: next }
+        let missCount = 0
+        const surviving = moved.filter(d => {
+          if (d.slayed) return now - d.slayTime < SLAY_LINGER
+          if (now - d.spawnTime < 600) return true
+
+          // Miss: demon reached center without being slayed
+          const distToCenter = Math.sqrt((d.x - cx) ** 2 + (d.y - cy) ** 2)
+          if (distToCenter < MISS_RADIUS) {
+            missCount++
+            return false
+          }
+
+          return d.x > -100 && d.x < W + 100 && d.y > -100 && d.y < H + 100
+        })
+
+        if (missCount > 0) {
+          const newLives = prev.lives - missCount
+          if (newLives <= 0) {
+            return {
+              activeDemonHeads: surviving,
+              lives: 0,
+              gameActive: false,
+              gameScreen: 'timesUp',
+            }
+          }
+          return { activeDemonHeads: surviving, lives: newLives }
+        }
+
+        return { activeDemonHeads: surviving }
       })
     }, 33)
     return () => clearInterval(moveInterval)

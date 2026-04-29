@@ -5,7 +5,7 @@
   transform: translateX(-50%);
   z-index: 10;
   pointer-events: none;
-  width: min(820px, 88vw);
+  width: min(980px, 92vw);
   will-change: filter;
   filter:
     drop-shadow(0 0 14px #9944cc)
@@ -63,6 +63,24 @@
   font-size: 0.9rem;
   filter: drop-shadow(0 0 4px rgba(153, 68, 204, 0.8));
   flex-shrink: 0;
+}
+
+/* Lives hearts */
+.hud-lives {
+  display: flex;
+  gap: 4px;
+  line-height: 1;
+}
+
+.hud-heart {
+  font-size: 1rem;
+  color: #ff4455;
+  filter: drop-shadow(0 0 4px rgba(255, 68, 85, 0.85));
+}
+
+.hud-heart--lost {
+  color: rgba(255, 255, 255, 0.15);
+  filter: none;
 }
 
 /* Combo value */

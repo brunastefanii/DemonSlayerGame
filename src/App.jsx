@@ -16,6 +16,8 @@ const initialState = {
   demonsSlayed: 0,
   currentCombo: 0,
   timeRemaining: 60,
+  lives: 3,
+  gamePaused: false,
   activeDemonHeads: [],
   fingerTrail: [],
 }
@@ -43,6 +45,7 @@ function App() {
         timeRemaining={gameState.timeRemaining}
         currentCombo={gameState.currentCombo}
         demonsSlayed={gameState.demonsSlayed}
+        lives={gameState.lives}
         selectedLevel={gameState.selectedLevel}
         gameActive={gameState.gameActive}
         gameScreen={gameState.gameScreen}

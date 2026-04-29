@@ -31,6 +31,7 @@ function TimesUp({ gameState, updateState }) {
       score: 0,
       demonsSlayed: 0,
       currentCombo: 0,
+      lives: 3,
       activeDemonHeads: [],
       fingerTrail: [],
     })
@@ -44,6 +45,7 @@ function TimesUp({ gameState, updateState }) {
       score: 0,
       demonsSlayed: 0,
       currentCombo: 0,
+      lives: 3,
       activeDemonHeads: [],
       fingerTrail: [],
     })
