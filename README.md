@@ -72,7 +72,7 @@ flowchart TD
 
 ## Design Intent
 
-Full PRD written before AI engagement: [`claude/docs/PRD_DemonSlayer.pdf`](claude/docs/PRD_DemonSlayer.pdf)
+Full PRD written before AI engagement: [`claude/docs/PRD_DemonSlayer.md`](claude/docs/PRD_DemonSlayer.md)
 
 **Domain:** Gesture-based arcade game — hand tracking as the controller.
 
