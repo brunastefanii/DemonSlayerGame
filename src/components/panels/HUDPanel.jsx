@@ -1,8 +1,8 @@
 import './HUDPanel.css'
 
-// Panel B — The Detail View (HUD / Feedback Layer)
-// Displays real-time in-game data: score, timer, combo, kill feedback.
-// Reads from shared state only — never writes.
+// Panel B — HUD
+// CSS-built bar: SCORE left | diamond | COMBO center | diamond | TIME right
+// Purple neon glow matching the reference design.
 
 function HUDPanel({ score, timeRemaining, currentCombo, demonsSlayed, gameActive, gameScreen }) {
   const showHUD = gameActive || gameScreen === 'countdown'
@@ -13,19 +13,34 @@ function HUDPanel({ score, timeRemaining, currentCombo, demonsSlayed, gameActive
 
   return (
     <div className="hud-panel">
-      <div className="hud-score">
-        <span className="hud-label">SCORE</span>
-        <span className="hud-value">{score}</span>
-      </div>
+      <div className="hud-bar">
 
-      <div className={`hud-timer ${isLow ? 'hud-timer--low' : ''} ${isCritical ? 'hud-timer--critical' : ''}`}>
-        <span className="hud-value">{timeRemaining}</span>
-      </div>
+        {/* SCORE */}
+        <div className="hud-section hud-section--left">
+          <span className="hud-label">SCORE</span>
+          <span className="hud-value">{score}</span>
+        </div>
 
-      <div className="hud-combo">
-        {currentCombo >= 2 && (
-          <span className="hud-combo-value">x{currentCombo} COMBO</span>
-        )}
+        <span className="hud-pip">✦</span>
+
+        {/* COMBO center */}
+        <div className="hud-section hud-section--center">
+          <span className="hud-label">COMBO</span>
+          <span className="hud-value hud-combo-val">
+            {currentCombo >= 2 ? `x${currentCombo}` : '0'}
+          </span>
+        </div>
+
+        <span className="hud-pip">✦</span>
+
+        {/* TIME */}
+        <div className="hud-section hud-section--right">
+          <span className="hud-label">TIME</span>
+          <span className={`hud-value ${isLow ? 'hud-timer--low' : ''} ${isCritical ? 'hud-timer--critical' : ''}`}>
+            {timeRemaining}
+          </span>
+        </div>
+
       </div>
     </div>
   )

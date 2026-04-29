@@ -1,17 +1,24 @@
 import { useState, useEffect } from 'react'
 import gameData from '../../data/gameData.json'
 import { playCountdown, playGo } from '../../hooks/useAudio'
+import bgImage from '../../assets/images/demon slayer 3 background.png'
+import img3 from '../../assets/images/demon slayer countdown transparent 3.png'
+import img2 from '../../assets/images/demon slayer countdown transparent 2.png'
+import img1 from '../../assets/images/demon slayer countdown transparent 1.png'
+import imgGo from '../../assets/images/demon slayer countdown transparent GO.png'
 import './screens.css'
 
 // Screen 4 — Countdown
-// Displays 3 → 2 → 1 → GO! then writes gameActive → true and transitions to gameplay.
+// Dark background + transparent PNG countdown assets (3 → 2 → 1 → GO!)
+// Advances to gameplay on GO!
 
 const STEPS = [3, 2, 1, 'GO!']
+const IMAGES = [img3, img2, img1, imgGo]
 
 function Countdown({ gameState, updateState }) {
   const [step, setStep] = useState(0)
 
-  // Play sound on each step change
+  // Play sound on each step
   useEffect(() => {
     if (step < STEPS.length - 1) {
       playCountdown(step)
@@ -20,6 +27,7 @@ function Countdown({ gameState, updateState }) {
     }
   }, [step])
 
+  // Advance steps and transition to gameplay
   useEffect(() => {
     if (step < STEPS.length - 1) {
       const t = setTimeout(() => setStep(s => s + 1), 1000)
@@ -46,9 +54,13 @@ function Countdown({ gameState, updateState }) {
 
   return (
     <div className="screen countdown-screen">
-      <div className="countdown-number" key={step}>
-        {STEPS[step]}
-      </div>
+      <div className="countdown-bg" style={{ backgroundImage: `url(${bgImage})` }} />
+      <img
+        key={step}
+        src={IMAGES[step]}
+        className="countdown-img"
+        alt={String(STEPS[step])}
+      />
     </div>
   )
 }
