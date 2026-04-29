@@ -410,6 +410,7 @@ Not stated — user interrupted before build.
 | [checkpoint-08.md](checkpoint-08.md) | 2026-04-29 | Gameplay screen — virtual background segmentation (MediaPipe SelfieSegmentation) |
 | [checkpoint-09.md](checkpoint-09.md) | 2026-04-29 | Gameplay features — lives, sword trail glow, pause system, combo scoring, demon images |
 | [checkpoint-10.md](checkpoint-10.md) | 2026-04-29 | Game Over + Times Up screens — background art, score-only HUD, hexagonal buttons |
+| [checkpoint-11.md](checkpoint-11.md) | 2026-04-29 | Sound on/off toggle — master gain node, persistent fixed button all screens |
 
 _[Checkpoint docs live in `claude/checkpoints/`. Add a row here each time one is created.]_
 
@@ -468,6 +469,30 @@ Floating layout matches level select design language. Panel felt too heavy for t
 User preferred clean background art over camera feed for countdown. CSS HUD gives more control over size and glow than a PNG asset.
 
 **Checkpoint:** YES — checkpoint-07.md
+
+---
+
+### Entry 21 — 2026-04-29 — Sound On/Off Toggle
+
+**What I asked AI to do:**
+Add a sound on/off icon to the top right of every screen so users can mute the game.
+
+**What AI produced:**
+- `useAudio.js` — added `_masterGain` node that all audio routes through; `setMuted(bool)` and `isMuted()` exported
+- `SoundToggle.jsx` — button with speaker-on/off SVG icons, reads and sets mute state
+- `SoundToggle.css` — fixed top-right position, dark box with purple border, hover glow
+- `App.jsx` — renders `<SoundToggle />` outside all panels so it persists across screens
+
+**What I kept:**
+- Everything
+
+**What I changed/rejected:**
+- Nothing rejected
+
+**Why:**
+—
+
+**Checkpoint:** YES — checkpoint-11.md
 
 ---
 

@@ -3,6 +3,7 @@ import './App.css'
 import BrowserPanel from './components/panels/BrowserPanel'
 import HUDPanel from './components/panels/HUDPanel'
 import ControllerPanel from './components/panels/ControllerPanel'
+import SoundToggle from './components/ui/SoundToggle'
 
 // Shared state lives here — App is the single source of truth.
 // All three panels receive state as props and send changes back up via updateState.
@@ -53,6 +54,9 @@ function App() {
 
       {/* Panel C — invisible: camera, gesture detection, game logic, timer */}
       <ControllerPanel gameState={gameState} updateState={updateState} />
+
+      {/* Persistent sound toggle — top-right corner, all screens */}
+      <SoundToggle />
     </div>
   )
 }

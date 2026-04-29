@@ -7,12 +7,33 @@
 //   Drop your WAV files into src/assets/audio/ and update the paths.
 
 let _ctx = null
+let _masterGain = null
 let _music = []
+let _muted = false
 
 function getCtx() {
-  if (!_ctx) _ctx = new (window.AudioContext || window.webkitAudioContext)()
+  if (!_ctx) {
+    _ctx = new (window.AudioContext || window.webkitAudioContext)()
+    _masterGain = _ctx.createGain()
+    _masterGain.gain.value = _muted ? 0 : 1
+    _masterGain.connect(_ctx.destination)
+  }
   if (_ctx.state === 'suspended') _ctx.resume()
   return _ctx
+}
+
+function dest() {
+  getCtx()
+  return _masterGain
+}
+
+export function setMuted(muted) {
+  _muted = muted
+  if (_masterGain) _masterGain.gain.value = muted ? 0 : 1
+}
+
+export function isMuted() {
+  return _muted
 }
 
 // ─── Music ────────────────────────────────────────────────────────────────────
@@ -42,7 +63,7 @@ export function playMusic(screen) {
     const osc  = ctx.createOscillator()
     const gain = ctx.createGain()
     osc.connect(gain)
-    gain.connect(ctx.destination)
+    gain.connect(dest())
     osc.type = 'sine'
     osc.frequency.setValueAtTime(freq, ctx.currentTime)
     gain.gain.setValueAtTime(0.0001, ctx.currentTime)
@@ -60,7 +81,7 @@ export function playHover() {
   const osc  = ctx.createOscillator()
   const gain = ctx.createGain()
   osc.connect(gain)
-  gain.connect(ctx.destination)
+  gain.connect(dest())
   osc.type = 'sine'
   osc.frequency.setValueAtTime(520, ctx.currentTime)
   osc.frequency.exponentialRampToValueAtTime(620, ctx.currentTime + 0.06)
@@ -78,7 +99,7 @@ export function playCountdown(step) {
   const osc  = ctx.createOscillator()
   const gain = ctx.createGain()
   osc.connect(gain)
-  gain.connect(ctx.destination)
+  gain.connect(dest())
   osc.type = 'sawtooth'
   osc.frequency.setValueAtTime(freq, ctx.currentTime)
   osc.frequency.exponentialRampToValueAtTime(freq * 0.6, ctx.currentTime + 0.25)
@@ -95,7 +116,7 @@ export function playGo() {
     const osc  = ctx.createOscillator()
     const gain = ctx.createGain()
     osc.connect(gain)
-    gain.connect(ctx.destination)
+    gain.connect(dest())
     osc.type = 'square'
     const t = ctx.currentTime + i * 0.04
     osc.frequency.setValueAtTime(freq, t)
@@ -123,7 +144,7 @@ export function playSlay() {
   const gain = ctx.createGain()
   source.connect(filter)
   filter.connect(gain)
-  gain.connect(ctx.destination)
+  gain.connect(dest())
   gain.gain.setValueAtTime(0.65, ctx.currentTime)
   gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.12)
   source.start(ctx.currentTime)
@@ -136,7 +157,7 @@ export function playCombo() {
     const osc  = ctx.createOscillator()
     const gain = ctx.createGain()
     osc.connect(gain)
-    gain.connect(ctx.destination)
+    gain.connect(dest())
     osc.type = 'sine'
     const t = ctx.currentTime + i * 0.07
     osc.frequency.setValueAtTime(freq, t)
@@ -155,7 +176,7 @@ export function playHeartbeat() {
     const osc  = ctx.createOscillator()
     const gain = ctx.createGain()
     osc.connect(gain)
-    gain.connect(ctx.destination)
+    gain.connect(dest())
     osc.type = 'sine'
     osc.frequency.setValueAtTime(70, ctx.currentTime + offset)
     gain.gain.setValueAtTime(0.5, ctx.currentTime + offset)
@@ -171,7 +192,7 @@ export function playTick() {
   const osc  = ctx.createOscillator()
   const gain = ctx.createGain()
   osc.connect(gain)
-  gain.connect(ctx.destination)
+  gain.connect(dest())
   osc.type = 'square'
   osc.frequency.setValueAtTime(1400, ctx.currentTime)
   gain.gain.setValueAtTime(0.22, ctx.currentTime)
@@ -187,7 +208,7 @@ export function playTimesUp() {
     const osc  = ctx.createOscillator()
     const gain = ctx.createGain()
     osc.connect(gain)
-    gain.connect(ctx.destination)
+    gain.connect(dest())
     osc.type = 'sine'
     const t = ctx.currentTime + i * 0.015
     osc.frequency.setValueAtTime(freq, t)
